@@ -1,4 +1,4 @@
-#leukemia-classification-vgg19#
+leukemia-classification-vgg19
 
 1. Title & Overview (Markdown)
 Leukemia Classification using VGG19 Transfer Learning
