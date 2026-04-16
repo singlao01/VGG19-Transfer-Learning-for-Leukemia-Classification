@@ -1,4 +1,6 @@
-#Leukemia-classification-vgg19
+# Leukemia Classification using VGG19 Transfer Learning
+
+A deep learning-based system for detecting leukemia from microscopic blood cell images, prioritizing high sensitivity for clinical reliability.
 
 1. Title & Overview (Markdown)
 Leukemia Classification using VGG19 Transfer Learning
