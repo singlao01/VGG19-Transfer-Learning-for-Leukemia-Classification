@@ -70,7 +70,7 @@ def build_model():
         input_shape=(224, 224, 3)
     )
 
-    ##Freeze pretrained layers
+    Freeze pretrained layers
     base_model.trainable = False
 
     x = tf.keras.layers.GlobalAveragePooling2D()(base_model.output)
@@ -125,31 +125,31 @@ def plot_history(history):
 Step 1: Clean Your Notebook (CRUCIAL)
 Before submission:
 
-Remove:
+-Remove:
 Debug prints
 Random experiments
 Duplicate cells
 Unused imports
 
-Keep:
+-Keep:
 Only final working pipeline
 
 Step 2: Add Explanations Between Sections
 After each major block, add a markdown explanation:
 
-Example:
+-Example:
 Why VGG19?
 VGG19 is used due to its strong feature extraction capability and proven performance in medical imaging tasks.
 
 Step 3: Add Outputs for Proof
-Include:
+-Include:
 Training graph
 Confusion matrix
 ROC curve
 This shows execution proof (very important for grading)
 
 Step 4: Execution Order Check
-Click:
+-Click:
 Kernel → Restart & Run All
 -If it runs without error → perfect
 -If not → fix dependencies/paths
