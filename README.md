@@ -1,3 +1,5 @@
+#leukemia-classification-vgg19#
+
 1. Title & Overview (Markdown)
 Leukemia Classification using VGG19 Transfer Learning
 This notebook implements a deep learning model to classify blood cell images into cancerous and benign categories using transfer learning.
@@ -98,7 +100,8 @@ def train_model(model, train_data, val_data):
     )
 
     return history
-🔷 7. Evaluation
+   
+7. Evaluation
 def plot_history(history):
     """
     Plots training and validation accuracy.
