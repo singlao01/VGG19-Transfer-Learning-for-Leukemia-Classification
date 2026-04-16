@@ -2,7 +2,7 @@
 Leukemia Classification using VGG19 Transfer Learning
 This notebook implements a deep learning model to classify blood cell images into cancerous and benign categories using transfer learning.
 
-Key Objective: Maximize sensitivity to reduce false negatives.
+   Key Objective: Maximize sensitivity to reduce false negatives.
 
 2. Imports
 import os
@@ -16,8 +16,6 @@ BATCH_SIZE = 32
 EPOCHS = 20
 BASE_DATA_PATH = "path/to/dataset"
 SEED = 42
-
-# Set seed for reproducibility
 np.random.seed(SEED)
 tf.random.set_seed(SEED)
 
