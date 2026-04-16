@@ -25,7 +25,7 @@ tf.random.set_seed(SEED)
 
 4. Data Loading & Preprocessing
 def load_data(data_path):
-    """
+    
     Loads and preprocesses dataset.
 
     Args:
@@ -33,7 +33,7 @@ def load_data(data_path):
 
     Returns:
         train_data, val_data
-    """
+    
     
     if not os.path.exists(data_path):
         raise FileNotFoundError("Dataset path not found!")
@@ -60,10 +60,9 @@ def load_data(data_path):
     
 5. Model Building
 def build_model():
-    """
+    
     Builds VGG19-based transfer learning model.
-    """
-
+    
     base_model = tf.keras.applications.VGG19(
         include_top=False,
         weights='imagenet',
@@ -85,10 +84,9 @@ def build_model():
    
 6. Model Compilation & Training
 def train_model(model, train_data, val_data):
-    """
+    
     Compiles and trains the model.
-    """
-
+    
     model.compile(
         optimizer=tf.keras.optimizers.Adam(learning_rate=1e-3),
         loss='binary_crossentropy',
@@ -105,9 +103,9 @@ def train_model(model, train_data, val_data):
    
 7. Evaluation
 def plot_history(history):
-    """
+    
     Plots training and validation accuracy.
-    """
+    
     plt.plot(history.history['accuracy'])
     plt.plot(history.history['val_accuracy'])
     plt.legend(['Train', 'Validation'])
