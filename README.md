@@ -1,93 +1,163 @@
-Step 1: Problem Definition
-Goal: Classify microscopic blood cell images into:
-Cancerous (Leukemia)
-Benign (Normal)
-Key challenge: Class imbalance (5.5:1) and high clinical risk of false negatives
-Priority metric: Sensitivity (recall for cancer cases)
+1. Title & Overview (Markdown)
+Leukemia Classification using VGG19 Transfer Learning
+This notebook implements a deep learning model to classify blood cell images into cancerous and benign categories using transfer learning.
 
-Step 2: Dataset Preparation
-Total images: 3,256
-Classes:
-Early, Pre, Pro → merged into Cancerous
-Benign → Non-cancerous
-Two dataset versions:
-Original images
-Segmented images (background removed)
+Key Objective: Maximize sensitivity to reduce false negatives.
 
-Step 3: Data Preprocessing
-Resize images (typically 224×224 for VGG19)
-Normalize pixel values
-Apply data augmentation (if used)
-Handle imbalance using:
-Class weights
-Cancerous: 0.59
-Benign: 3.23
+2. Imports
+import os
+import numpy as np
+import tensorflow as tf
+import matplotlib.pyplot as plt
 
-Step 4: Model Selection (Transfer Learning)
-Base model: VGG19 (pretrained on ImageNet)
-Freeze convolutional layers (feature extractor)
-Add custom classification head:
-Global Average Pooling
-Batch Normalization
-Dense layers (512 → 256 → 128)
-Dropout (0.5, 0.3, 0.2)
-Final Sigmoid layer (binary output)
+ 3. Configuration 
+IMAGE_SIZE = (224, 224)
+BATCH_SIZE = 32
+EPOCHS = 20
+BASE_DATA_PATH = "path/to/dataset"
+SEED = 42
 
-Step 5: Model Compilation
-Loss function: Binary Cross-Entropy (with class weights)
-Optimizer: Adam (learning rate = 0.001)
-Metrics tracked:
-Accuracy
-Sensitivity
-Specificity
-F1-score
-AUC-ROC
+# Set seed for reproducibility
+np.random.seed(SEED)
+tf.random.set_seed(SEED)
 
-Step 6: Training Strategy
-Use 3-Fold Stratified Cross-Validation
-Ensures class balance in each fold
-Train on:
-2 folds → Training
-1 fold → Validation
-Repeat 3 times and average results
+4. Data Loading & Preprocessing
+def load_data(data_path):
+    """
+    Loads and preprocesses dataset.
 
-Step 7: Threshold Optimization
-Instead of default 0.5:
-Use Youden’s J Statistic
-Helps maximize:
-Sensitivity + Specificity
+    Args:
+        data_path (str): Dataset directory path
 
-Step 8: Model Evaluation
+    Returns:
+        train_data, val_data
+    """
+    
+    if not os.path.exists(data_path):
+        raise FileNotFoundError("Dataset path not found!")
 
-Evaluate using:
+    train_data = tf.keras.preprocessing.image_dataset_from_directory(
+        data_path,
+        validation_split=0.2,
+        subset="training",
+        seed=SEED,
+        image_size=IMAGE_SIZE,
+        batch_size=BATCH_SIZE
+    )
 
-Sensitivity (Recall) → MOST IMPORTANT
-Accuracy
-AUC-ROC
-F1-score
-Specificity
+    val_data = tf.keras.preprocessing.image_dataset_from_directory(
+        data_path,
+        validation_split=0.2,
+        subset="validation",
+        seed=SEED,
+        image_size=IMAGE_SIZE,
+        batch_size=BATCH_SIZE
+    )
 
-Final Results:
-Sensitivity: 98.69% (Original)
-Accuracy: 97.39%
-AUC: 0.994
-Strong performance especially in detecting cancer cases
+    return train_data, val_data
+    
+5. Model Building
+def build_model():
+    """
+    Builds VGG19-based transfer learning model.
+    """
 
-Step 9: Comparison Study
+    base_model = tf.keras.applications.VGG19(
+        include_top=False,
+        weights='imagenet',
+        input_shape=(224, 224, 3)
+    )
 
-Compare:
-Original images vs Segmented images
-Observation:
-Original performed slightly better in sensitivity
-Segmented improved specificity
+    # Freeze pretrained layers
+    base_model.trainable = False
 
-Step 10: Additional Techniques (if implemented)
-Grad-CAM → Model interpretability
-Hybrid models:
-CNN + SVM
-CNN + Random Forest
+    x = tf.keras.layers.GlobalAveragePooling2D()(base_model.output)
+    x = tf.keras.layers.BatchNormalization()(x)
+    x = tf.keras.layers.Dense(512, activation='relu')(x)
+    x = tf.keras.layers.Dropout(0.5)(x)
 
-Step 11: Conclusion
-Transfer learning with VGG19 is effective
-High sensitivity ensures minimal missed cancer cases
-Suitable for clinical decision support systems
+    output = tf.keras.layers.Dense(1, activation='sigmoid')(x)
+
+    model = tf.keras.Model(inputs=base_model.input, outputs=output)
+    return model
+   
+6. Model Compilation & Training
+def train_model(model, train_data, val_data):
+    """
+    Compiles and trains the model.
+    """
+
+    model.compile(
+        optimizer=tf.keras.optimizers.Adam(learning_rate=1e-3),
+        loss='binary_crossentropy',
+        metrics=['accuracy']
+    )
+
+    history = model.fit(
+        train_data,
+        validation_data=val_data,
+        epochs=EPOCHS
+    )
+
+    return history
+🔷 7. Evaluation
+def plot_history(history):
+    """
+    Plots training and validation accuracy.
+    """
+    plt.plot(history.history['accuracy'])
+    plt.plot(history.history['val_accuracy'])
+    plt.legend(['Train', 'Validation'])
+    plt.title("Model Accuracy")
+    plt.show()
+   
+8. Execution Cell (Final)
+train_data, val_data = load_data(BASE_DATA_PATH)
+
+model = build_model()
+history = train_model(model, train_data, val_data)
+
+plot_history(history)
+Step 2: Clean Your Notebook (CRUCIAL)
+
+Before submission:
+
+Remove:
+Debug prints
+Random experiments
+Duplicate cells
+Unused imports
+
+Keep:
+Only final working pipeline
+
+Step 3: Add Explanations Between Sections
+After each major block, add a markdown explanation:
+
+Example:
+Why VGG19?
+VGG19 is used due to its strong feature extraction capability and proven performance in medical imaging tasks.
+
+Step 4: Add Outputs for Proof
+Include:
+Training graph
+Confusion matrix
+ROC curve
+This shows execution proof (very important for grading)
+
+Step 5: Execution Order Check
+Click:
+Kernel → Restart & Run All
+-If it runs without error → perfect
+-If not → fix dependencies/paths
+
+Step 6: README Must Match Notebook
+
+Your README should clearly say:
+This is a Jupyter Notebook-based project
+
+How to run:
+jupyter notebook
+
+Then open:
+leukemia_final.ipynb
