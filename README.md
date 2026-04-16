@@ -115,14 +115,14 @@ def plot_history(history):
     plt.show()
    
 8. Execution Cell (Final)
-train_data, val_data = load_data(BASE_DATA_PATH)
+ train_data, val_data = load_data(BASE_DATA_PATH)
 
-model = build_model()
-history = train_model(model, train_data, val_data)
+ model = build_model()
+ history = train_model(model, train_data, val_data)
 
-plot_history(history)
-Step 2: Clean Your Notebook (CRUCIAL)
-
+ plot_history(history)
+ 
+Step 1: Clean Your Notebook (CRUCIAL)
 Before submission:
 
 Remove:
@@ -134,27 +134,27 @@ Unused imports
 Keep:
 Only final working pipeline
 
-Step 3: Add Explanations Between Sections
+Step 2: Add Explanations Between Sections
 After each major block, add a markdown explanation:
 
 Example:
 Why VGG19?
 VGG19 is used due to its strong feature extraction capability and proven performance in medical imaging tasks.
 
-Step 4: Add Outputs for Proof
+Step 3: Add Outputs for Proof
 Include:
 Training graph
 Confusion matrix
 ROC curve
 This shows execution proof (very important for grading)
 
-Step 5: Execution Order Check
+Step 4: Execution Order Check
 Click:
 Kernel → Restart & Run All
 -If it runs without error → perfect
 -If not → fix dependencies/paths
 
-Step 6: README Must Match Notebook
+Step 5: README Must Match Notebook
 
 Your README should clearly say:
 This is a Jupyter Notebook-based project
