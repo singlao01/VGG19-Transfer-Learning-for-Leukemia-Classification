@@ -1,4 +1,4 @@
-leukemia-classification-vgg19
+#Leukemia-classification-vgg19
 
 1. Title & Overview (Markdown)
 Leukemia Classification using VGG19 Transfer Learning
@@ -68,7 +68,7 @@ def build_model():
         input_shape=(224, 224, 3)
     )
 
-    # Freeze pretrained layers
+    ##Freeze pretrained layers
     base_model.trainable = False
 
     x = tf.keras.layers.GlobalAveragePooling2D()(base_model.output)
